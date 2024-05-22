@@ -55,7 +55,7 @@ public class Code02 {
 적절한 구조는 Base case와 Recursive case를 가져야 한다
 
 
-### 1 ~ n까지의 합
+### 예제 1. 1 ~ n까지의 합
 
 다음 코드의 결과는 `1 ~ n`까지의 합을 구한다
 
@@ -109,7 +109,7 @@ public static int func(int n) { // 이 함수의 mission은 0~n까지 합을 구
 
 순환함수 만날 때 머릿속으로 위처럼 생각하자
 
-### Factorial : n!
+### 예제 2. Factorial : n!
 
 팩토리얼 정의
 
@@ -133,7 +133,7 @@ factorial(4)를 한다면 순서는 다음과 같다
 
 
 
-### x^n
+### 예제 3. x^n
 
 x의 n승을 계산하는 함수도 본질적으로 순환함수다
 
@@ -148,7 +148,7 @@ double power(double x, int n) {
 }
 ```
 
-### Fibonacci Number
+### 예제 4. Fibonacci Number
 
 피보나치도 대표적인 순환의 예다
 
@@ -165,7 +165,7 @@ int fibonacci(int n) {
 }
 ```
 
-### 최대 공약수: Euclid Method
+### 예제 5. 최대 공약수: Euclid Method
 
 최대 공약수를 구하는 함수도 순환으로 만들 수 있다
 
@@ -210,5 +210,106 @@ int gcd(int p, int q) {
 ```
 
 
+## Recursion은 수함 함수 계산에만 유용한가?
 
+수함 함수뿐만 아니라 다른 많은 문제들을 recursion으로 해결할 수 있다
+
+
+### 예제 1. 문자열의 길이 계산
+
+문자열의 길이를 구할 때 순환 함수를 이용할 수 있다
+
+<img width="585" alt="image" src="https://github.com/yanJuicy/blog/assets/43159295/02879276-365e-4c5f-b284-7433a972c1ea">
+
+순환 코드는 다음과 같다
+
+```Java
+int length(String str) {
+   if (str.equals(""))  // base case
+      return 0;
+   else
+      return 1 + length(str.substring(1));
+}
+```
+
+아래와 같은 순서로 문자열의 길이를 구한다
+
+<img width="530" alt="image" src="https://github.com/yanJuicy/blog/assets/43159295/45041625-e126-4af0-949c-f88b5ade465b">
+
+
+### 예제 2. 문자열의 프린트
+
+문자열을 프린트하는 함수를 순환 함수로 만들어 보자
+
+```Java
+void printChars(String str) {
+   if (str.length() == 0)
+      return;
+   else {
+      System.out.println(str.charAt(0));  // 첫 문자 출력
+      printChars(str.substring(1));    // 나머지 문자 출력
+   }
+}
+```
+
+
+### 예제 3. 문자열을 뒤집어 프린트
+
+앞 예제와 반대되는 예제다
+
+<img width="865" alt="image" src="https://github.com/yanJuicy/blog/assets/43159295/17db8ad1-4e2d-43a0-8140-02c6c9eddf14">
+
+```Java
+void printCharsReverse(String str) {
+   if (str.length() == 0)
+      return;
+   else {
+      printChars(str.substring(1));    // 첫 문자를 제거한 나머지 문자열 출력
+      System.out.println(str.charAt(0));  // 첫 문자 출력
+   }
+}
+```
+
+
+### 예제 4. 2진수로 변환하여 출력
+
+음이 아닌 정수 n을 이진수로 변환해 프린트하는 예제다
+
+```Java
+void printInBinary(int n) {
+   if (n < 2)  // 0, 1은 그대로 출력
+      System.out.print(n);
+   else {
+      printInBinary(n / 2);      // n을 2로 나눈 몫을 먼저 2진수로 변환후 출력
+      System.out.print(n % 2);   // n을 2로 나눈 나머지를 출력
+   }
+}
+```
+
+
+### 예제 5. 배열의 합 구하기
+
+data[0]에서 data[n - 1]까지의 합을 구하는 예제다
+
+```Java
+int sum(int n, int[] data) {
+   if (n <= 0)
+      return 0;
+   else
+      return sum(n - 1, data) + data[n - 1];
+}
+```
+
+처음 n - 1개까지 합을 구한 후 나머지 데이터를 더한다
+
+
+## Recursion vs Iteration
+
+모든 순환 함수(Recursion)는 반복문(iteration)으로 변경 가능하다
+
+그 역도 성립한다. 즉 모든 반복문은 순환 함수로 표현 가능하다
+
+순환 함수는 복잡한 알고리즘을 단순하고 알기쉽게 표현하는 것을 가능하게 한다
+
+하지만 함수 호출에 따른 오버헤드가 있어 성능에서 손해를 볼 수 있다
 
