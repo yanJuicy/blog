@@ -313,3 +313,130 @@ int sum(int n, int[] data) {
 
 하지만 함수 호출에 따른 오버헤드가 있어 성능에서 손해를 볼 수 있다
 
+
+## 순환 알고리즘 설계
+
+### 순환 알고리즘의 조건
+
+- 적어도 하나의 base case, 즉 순환되지 않고 종료되는 case가 있어야 한다
+- 모든 case는 결국 base case로 수렴해야 한다
+
+순환 알고리즘을 설계할 때는 암시적(implicit) 매개변수를 명시적(explicit) 매개변수로 바꾸는게 좋다
+
+### 순차 탐색
+
+data[0]에서 data[n-1] 사이에서 target을 검색하는 함수다
+
+검색 구간의 시작 인덱스 0은 보통 생략한다
+
+시작 인덱스 0은 암시적 매개변수다
+
+```Java
+int search(int[] data, int n, int target) {
+   for (int i = 0; i < n; i++) {
+      if (data[i] == target) {
+         return i;
+      }
+   }
+   
+   return -1;
+}
+```
+
+### 예제 1. 순차 탐색: 매개변수의 명시화
+
+위 순차 탐색 코드를 순환 함수로 작성하면 다음과 같다
+
+```Java
+int serach(int[] data, int begin, int end, int target) {
+   if (begin > end) 
+      return -1;
+   else if (target == data[begin])
+      return begin;
+   else
+      return search(data, begin + 1, end, target);
+}
+```
+
+이 함수는 data[begin]에서 data[end] 사이에서 target을 검색한다
+
+이전 함수와는 다르게 시작점 begin을 명시적으로 지정한다
+
+일반적으로 순환 함수는 맨 처음에 호출될 때만 생각하고 매개변수를 설계해서는 안된다
+
+순환 함수가 다시 자기 자신을 호출할 때도 생각해서 매개변수를 설계해야한다
+
+그래서 begin 매개변수를 명시적으로 표현한다
+
+
+#### 순차 탐색: 다른 버전
+
+이번엔 반대로 뒤에서 앞으로 탐색을 진행하는 예제다
+
+```Java
+int serach(int[] data, int begin, int end, int target) {
+   if (begin > end) 
+      return -1;
+   else if (target == data[end])
+      return end;
+   else
+      return search(data, begin, end - 1, target);
+}
+```
+
+또 다른 방법으로 배열의 가운데를 기준으로 양 옆으로 순차 탐색을 진행할 수 있다
+
+```Java
+int search(int[] data, int begin, int end, int target) {
+   if (begin > end) 
+      return -1;
+   else {
+      int middle = (begin + end) / 2;
+      if (data[middle] == target) 
+         return middle;
+      int index = search(data, begin, middle - 1, target);
+      if (index != -1) 
+         return index;
+      else
+         return search(data, middle + 1, end, target);
+   }
+}
+```
+
+
+### 예제 2. 최대값 찾기: 매개변수의 명시화
+
+다음은 배열의 최대값을 찾는 순환 함수다
+
+```Java
+int findMax(int[] data, int begin, int end) {
+   if (begin == end)
+      return data[begin];
+   else
+      return Math.max(data[begin], findMax(data, begin + 1, end));
+}
+```
+
+이 함수는 data[begin]에서 data[end] 사이에서 최대값을 찾아 반환한다
+
+recursion을 호출할 때 base인 begin 값이 계속 바뀌기 때문에 따로 명시적으로 매개변수화 하는게 좋다
+
+
+#### 최대값 찾기: 다른 버전
+
+가운데를 기준으로 양 옆으로 최대값을 찾는 코드다
+
+```Java
+int findMax(int[] data, int begin, int end) {
+   if (begin == end)
+      return data[begin];
+   else {
+      int middle = (begin + end) / 2;
+      int max1 = findMax(data, begin, middle);
+      int max2 = findMax(data, middle + 1, end);
+      return Math.max(max1, max2);
+   }
+}
+```
+
+
