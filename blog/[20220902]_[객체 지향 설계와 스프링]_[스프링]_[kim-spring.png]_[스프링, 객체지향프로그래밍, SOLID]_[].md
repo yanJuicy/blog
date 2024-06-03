@@ -198,5 +198,4 @@ public class Memberservice {
 - DI(Dependency Injection): 의존관계, 의존성 주입
 - DI 컨테이너 제공
 
-이들을 활용하면 클라이언크 코드의 변경 없이 기능을 확장할 수 있
-다
+이들을 활용하면 클라이언크 코드의 변경 없이 기능을 확장할 수 있다
