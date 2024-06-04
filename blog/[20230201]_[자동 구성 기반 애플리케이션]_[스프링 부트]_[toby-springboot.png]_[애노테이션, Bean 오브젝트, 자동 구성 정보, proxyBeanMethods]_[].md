@@ -7,12 +7,16 @@
 
 ![image](https://github.com/yanJuicy/blog/assets/43159295/99b232a9-ed25-46bf-9a76-190db5ceed43)
 
-Meta 애노테이션이 붙은 클래스를 사용하면 meta 애노테이션을 사용하는 것과 차이가 없다 
+애노테이션에 적용한 애노테이션을 메타 애노테이션이라고 한다
+
+메타 애노테이션이 붙은 클래스(@Controller, @Service)를 사용하면 메타 애노테이션(@Component)을 직접 사용하는 것과 같은 효력을 가진다 
 
 다른 이름을 사용함으로써 목적을 명확히 구분할 수 있다 
 
 - @Controller: Web MVC에서 컨트롤러 역할을 한다
 - @Service: 서비스 로직을 담당한다
+
+이들은 `@Component`가 직접 사용된 것처럼 컴포넌트 스캔의 대상이 된다
 
 또한 기존에 없는 새로운 기능을 따로 추가할 수 있다
 
@@ -98,6 +102,45 @@ public class HelloServiceTest {
 
 
 
+## 합성 어노테이션 적용
+
+기존 실행 코드는 다음과 같다
+
+```Java
+@Configuration
+@ComponentScan
+public class HellobootApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(HellobootApplication.class, args);
+    }
+
+
+}
+```
+
+`@Configuration`과 `@ComponentScan` 애노테이션을 메타 애노테이션으로 가지는 새로운 애노테이션으로 합쳐서 합성 애노테이션을 만든다
+
+```Java
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Configuration
+@ComponentScan
+public @interface MySpringBootAnnotation {
+}
+
+
+@MySpringBootAnnotation
+public class HellobootApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(HellobootApplication.class, args);
+    }
+
+}
+```
+
+이처럼 합성 애노테이션을 만들어 적용할 수 있다
 
 
 
