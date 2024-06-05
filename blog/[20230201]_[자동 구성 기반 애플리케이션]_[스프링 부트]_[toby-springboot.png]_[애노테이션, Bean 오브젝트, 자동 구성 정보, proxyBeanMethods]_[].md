@@ -196,3 +196,56 @@ public class HellobootApplication {
 
 그리고 스프링 부트가 필요한 `Configuration`을 골라서 적용한다 
 
+
+
+
+## 인프라 빈 구성 정보 분리
+
+`@Import`를 이용해 스캔 대상이 아닌 클래스를 빈으로 등록하도록 추가할 수 있다
+
+다음과 같은 `@Configuration` 어노테이션이 붙은 클래스를 가져온다
+
+```Java
+@Configuration 
+public class Config {
+    @Bean
+    public DispatcherServlet dispatcherServlet() {
+        return new DispatcherServlet();
+    }
+    
+    @Bean
+    public ServletWebServerFactory servletWebServerFactory() {
+        return new TomcatServletWebServerFactory();
+    }    
+}
+```
+
+![image](https://github.com/yanJuicy/blog/assets/43159295/29451054-20e0-44a3-93e2-f3d0c13a7999)
+
+위와 같이 지정해서 `@Import`를 사용하면 된다
+
+```Java
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Configuration
+@ComponentScan
+@Import(Config.class)   // Config 클래스 안에 빈들을 추가
+public @interface MySpringBootAnnotation {
+}
+```
+
+
+다음처럼 `@Import`에 추가하는 클래스들을 여러개로 가질 수 있다
+
+```Java
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Configuration
+@ComponentScan
+@Import({DispatcherServletConfig.class, TomcatWebServerConfig.class}})
+public @interface MySpringBootAnnotation {
+}
+```
+
+![image](https://github.com/yanJuicy/blog/assets/43159295/a87d2c83-d9bb-40bd-9804-dc4fb5ca22c9)
+
