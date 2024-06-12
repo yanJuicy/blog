@@ -232,8 +232,165 @@ Student는 자신이 수강하는 Course를 알지만, Course는 잔신을 수�
 
 
 
+### 일반화 관계
+
+객체지향 개념에서 일반화 관계를 상속 관계라 한다
+
+가전 제품과 세탁기 사이의 관계 or TV, 식기세척기와 가전 제품의 관계는 모두 가전 제품과 `is a kind of 관계`다
+
+- 세탁기 is a kind of 가전 제품
+- TV is a kind of 가전 제품
+- 식기세척기 is a kind of 가전 제품
+
+
+UML에서 일반화 관계는 다음과 같이 표현한다
+
+두 클래스를 연결하는 화살표의 끝에 빈삼각형 표시를 해 표현한다
+
+![image](https://github.com/yanJuicy/blog/assets/43159295/60d16f2e-3121-4b3f-bb16-634984137c59)
 
 
 
+### 집합 관계
+
+집합 관계는 UML 연관 관계의 특별 경우로 전체와 부분의 관계를 명확하게 명시하고자 할 때 사용한다
+
+*집약*(aggregation)과 *합성*(composition) 두 종류의 집합 관계가 존재한다
+
+집약 관계는 한 객체가 다른 객체를 포함하는 것을 나타낸다
+
+전체-부분 관계이다
+
+전체를 가르키는 클래스 방향에 빈 마름모로 표시한다
+
+부분을 나타내는 객체를 다른 객체와 공유할 수 있는 경우에 집약 관계로 나타낸다
+
+전체 객체의 라이프사이클과 부분 객체의 라이프사이클은 독립적이다
+
+![image](https://github.com/yanJuicy/blog/assets/43159295/a21a8377-a107-4fb9-980a-f55bc6cc700f)
+
+합성 관계는 전체를 가리키는 클래스 방향에 채워진 마름모로 표시되며 부분 객체가 전체 객체에 속하는 관계다
+
+전체 객체가 사라지면 부분 객체도 사라진다
+
+![image](https://github.com/yanJuicy/blog/assets/43159295/09ff4988-30a9-4a5f-8ef3-dad8a1de9c07)
 
 
+코드를 통해 집약 관계와 합성 관계를 구분할 수 있다
+
+```Java
+public class Computer {
+    private MainBoard mb;
+    private CPU c;
+    private Memory m;
+    private PowerSupply ps;
+    
+    public Computer() {
+        mb = new MainBoard();
+        c = new CPU();
+        m = new Memory();
+        ps = new PowerSupply();
+    }
+}
+```
+
+이 코드에서 Computer 클래스의 객체가 사라지면 멤버도 같이 사라진다
+
+즉 부품 객체들의 라이프사이클이 Computer 객체의 라이프사이클에 의존한다
+
+이는 합성 관계로 모델링한다
+
+![image](https://github.com/yanJuicy/blog/assets/43159295/a92b30d5-849d-44d2-9e48-8cde336bcc96)
+
+
+다음 코드를 본다
+
+```Java
+public class Computer {
+    private MainBoard mb;
+    private CPU c;
+    private Memory m;
+    private PowerSupply ps;
+    
+    public Computer(MainBoard mb, CPU c, Memory m, PowerSupply ps) {
+        this.mb = mb;
+        this.c = c;
+        this.m = m;
+        this.ps = ps;
+    }
+}
+```
+
+Computer 객체가 사라져도 부품을 구성하는 MainBoard 객체, CPU 객체, Memory 객체, PowerSupply 객체는 사라지지 않는다
+
+외부에서 참조만 받아 사용하기 때문이다
+
+따라서 집약 관계를 사용하여 모델링 한다
+
+![image](https://github.com/yanJuicy/blog/assets/43159295/469fcdda-1de9-494e-857e-dd73fd343769)
+
+
+> 집약 관계와 합성 관계를 구분하려면 전체 객체와 부분 객체의 라이프사이클 의존성을 살펴본다
+
+
+
+### 의존 관계
+
+일반적으로 한 클래스가 다른 클래스를 사용하는 경우는 다음과 같이 3가지가 있다
+
+- 클래스의 속성에서 참조할 때
+- 연산의 인자로 사용될 때
+- 메소드 내부의 지역 객체로 참조될 때
+
+한 클래스의 객체를 다른 클래스 객체의 속성에서 참조하는 경우에, 참조하는 객체가 변경되지 않는 한 두 클래스의 객체들이 협력 관계를 통해 기능을 수행한다
+
+예를 들어, 자동차(Car 클래스)를 소유한 사람(Person 클래스)이 자동차를 이용해 출근한다고 할 경우 같은 자동차를 계속 사용할 것이다
+
+이런 경우 Person 클래스와 Car 클래스는 연관 관계며 Person 클래스의 속성으로 Car 객체를 참조한다
+
+![image](https://github.com/yanJuicy/blog/assets/43159295/1eac951e-b0a9-4e6b-8546-057b24e18231)
+
+
+자동차와 주유기(GasPump 클래스)의 관계는 다르다
+
+자동차에 주유할 때마다 특정 주유소의 특정 주유기만 사용할 수 없다
+
+이런 경우 매번 달라지는 주유기를 사용할 것이며 객체지향 프로그램에서는 주유기를 인자나 지역 객체로 생성해 구현한다
+
+UML에서 의존 관계를 점선으로 나타낸다
+
+![image](https://github.com/yanJuicy/blog/assets/43159295/b776f6f2-abfc-47f9-b783-3863a8a24c7d)
+
+
+> 연관 관계는 오랜 시간 동안 같이할 객체와의 관계며 의존 관계는 짧은 시간 동안 이용하는 관계다
+
+
+
+### 인터페이스와 실체화 관계
+
+인터페이스는 책임이다
+
+객체의 책임이란 객체가 해야 하는 일로서 해석할 수 있고 객체가 할 수 있는 일로도 해석할 수 있다
+
+즉, 객체가 외부에 제공하는 서비스나 기능은 객체가 수행하는 책임으로 보는 것이다
+
+예를 들어 TV 리모콘은 TV를 켜거나 끄거나 볼륨을 높이거나 낮추거나와 같은 책임을 수행해야 한다
+
+인터페이스를 공통되는 능력이 있는 것들을 대표하는 관점으로도 볼 수 있다
+
+비행기와 새는 공통적으로 날 수 있는 능력이 있다
+
+이런 공통 능력 관점에서 비행기와 새를 그룹화할 수 있는 매커니즘이 바로 인터페이스다
+
+![image](https://github.com/yanJuicy/blog/assets/43159295/bcce3de2-f9a8-499a-a847-a55ee9c884d9)
+
+
+인터페이스 자체는 실제로 책임을 수행하지 않는다
+
+비행기나 새와 같은 객체들이 책음을 실제로 수행한다
+
+UML에서는 인터페이스와 구현 클래스의 관계를 상속과 유사하게 빈 삼각형을 머리에 있는 실선 대신 점선을 사용해 표시한다
+
+또한 `<<interface>>`라고 스테레오 타입을 적는다
+
+> 일반화 관계는 is a kind of, 실체화 관계는 can do this
